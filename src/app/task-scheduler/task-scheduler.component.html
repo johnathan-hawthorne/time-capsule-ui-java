@@ -1,0 +1,276 @@
+<div class="p-5 mb-4 bg-light rounded-3">
+  <div class="container-fluid py-5">
+    <h1 class="display-3">Scheduler</h1>
+  </div>
+</div>
+<div class="container">
+  <div class="card">
+    <div class="card-header">
+      <form class="row g-2">
+        <div class="col-5">
+          <input type="date" class="form-control" [(ngModel)]="selectedDate" name="selectedDate"/>
+        </div>
+        <div class="col">
+          <button class="btn btn-primary float-end" (click)="getSchedule()">Get Schedule</button>
+        </div>
+      </form>
+    </div>
+    <div class="card-body">
+      <table class="table table-striped">
+        <thead>
+        <tr>
+          <th>Scheduled Time</th>
+          <th>Task Name</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor='let timeSlot of schedule.timeSlots; index as i'>
+          <td>{{timeSlot.slotTime}}</td>
+          <td style="font-weight:bold;">{{timeSlot.taskName}}</td>
+        </tr>
+        </tbody>
+      </table>
+      <!-- Button trigger modal -->
+
+      <button *ngIf="schedule.timeSlots && schedule.timeSlots.length == 0" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-keyboard="false"
+              (click)="openAddDialog()" data-bs-target="#addModal">
+        <i class="bi bi-plus-circle"></i> Add Schedule
+      </button>
+      <button *ngIf="schedule.timeSlots && schedule.timeSlots.length > 0" type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-keyboard="false"
+              (click)="openEditDialog()" data-bs-target="#editModal">
+        <i class="bi bi-pencil-fill"></i> Edit Schedule
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="addModal" tabindex="-1" role="dialog" data-bs-backdrop="static" aria-labelledby="addModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="addModalLabel">Add Schedule</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="row mb-3">
+            <label class="col-sm-5 col-form-label">Schedule Date</label>
+            <div class="col-sm-6">
+              <input type="date" class="form-control" [(ngModel)]="selectedDate" name="selectedDate"/>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <label class="col-sm-3 col-form-label">8AM</label>
+            <div class="col-sm-8">
+              <input type="text" class="form-control" placeholder="Task Name" [(ngModel)]="names[0]" name="taskOne"/>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <label class="col-sm-3 col-form-label">9AM</label>
+            <div class="col-sm-8">
+              <input type="text" class="form-control" placeholder="Task Name" [(ngModel)]="names[1]" name="taskTwo"/>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <label class="col-sm-3 col-form-label">10AM</label>
+            <div class="col-sm-8">
+              <input type="text" class="form-control" placeholder="Task Name" [(ngModel)]="names[2]" name="taskThree"/>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <label class="col-sm-3 col-form-label">11AM</label>
+            <div class="col-sm-8">
+              <input type="text" class="form-control" placeholder="Task Name" [(ngModel)]="names[3]" name="taskFour"/>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <label class="col-sm-3 col-form-label">12PM</label>
+            <div class="col-sm-8">
+              <input type="text" class="form-control" placeholder="Task Name" [(ngModel)]="names[4]" name="taskFive"/>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <label class="col-sm-3 col-form-label">1PM</label>
+            <div class="col-sm-8">
+              <input type="text" class="form-control" placeholder="Task Name" [(ngModel)]="names[5]" name="taskSix"/>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <label class="col-sm-3 col-form-label">2PM</label>
+            <div class="col-sm-8">
+              <input type="text" class="form-control" placeholder="Task Name" [(ngModel)]="names[6]" name="taskSeven"/>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <label class="col-sm-3 col-form-label">3PM</label>
+            <div class="col-sm-8">
+              <input type="text" class="form-control" placeholder="Task Name" [(ngModel)]="names[7]" name="taskEight"/>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <label class="col-sm-3 col-form-label">4PM</label>
+            <div class="col-sm-8">
+              <input type="text" class="form-control" placeholder="Task Name" [(ngModel)]="names[8]" name="taskNine"/>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <label class="col-sm-3 col-form-label">5PM</label>
+            <div class="col-sm-8">
+              <input type="text" class="form-control" placeholder="Task Name" [(ngModel)]="names[9]" name="taskTen"/>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <label class="col-sm-3 col-form-label">6PM</label>
+            <div class="col-sm-8">
+              <input type="text" class="form-control" placeholder="Task Name" [(ngModel)]="names[10]" name="taskEleven"/>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <label class="col-sm-3 col-form-label">7PM</label>
+            <div class="col-sm-8">
+              <input type="text" class="form-control" placeholder="Task Name" [(ngModel)]="names[11]" name="taskTwelve"/>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <label class="col-sm-3 col-form-label">8PM</label>
+            <div class="col-sm-8">
+              <input type="text" class="form-control" placeholder="Task Name" [(ngModel)]="names[12]" name="taskThirteen"/>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <label class="col-sm-3 col-form-label">9PM</label>
+            <div class="col-sm-8">
+              <input type="text" class="form-control" placeholder="Task Name" [(ngModel)]="names[13]" name="taskFourteen"/>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <label class="col-sm-3 col-form-label">10PM</label>
+            <div class="col-sm-8">
+              <input type="text" class="form-control" placeholder="Task Name" [(ngModel)]="names[14]" name="taskFifteen"/>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+          <button class="btn btn-outline-primary" role="button" (click)="addSchedule()" data-bs-dismiss="modal">Save</button>
+          <button class="btn btn-danger" role="button" data-bs-dismiss="modal">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" data-bs-backdrop="static" aria-labelledby="editModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="editModalLabel">Edit Schedule</h4>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="row mb-3">
+            <label class="col-sm-5 col-form-label">Schedule Date</label>
+            <div class="col-sm-6">
+              <input type="date" class="form-control" [(ngModel)]="selectedDate" name="selectedDate"/>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <label class="col-sm-3 col-form-label">8AM</label>
+            <div class="col-sm-8">
+              <input type="text" class="form-control" placeholder="Task Name" [(ngModel)]="names[0]" name="taskOne"/>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <label class="col-sm-3 col-form-label">9AM</label>
+            <div class="col-sm-8">
+              <input type="text" class="form-control" placeholder="Task Name" [(ngModel)]="names[1]" name="taskTwo"/>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <label class="col-sm-3 col-form-label">10AM</label>
+            <div class="col-sm-8">
+              <input type="text" class="form-control" placeholder="Task Name" [(ngModel)]="names[2]" name="taskThree"/>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <label class="col-sm-3 col-form-label">11AM</label>
+            <div class="col-sm-8">
+              <input type="text" class="form-control" placeholder="Task Name" [(ngModel)]="names[3]" name="taskFour"/>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <label class="col-sm-3 col-form-label">12PM</label>
+            <div class="col-sm-8">
+              <input type="text" class="form-control" placeholder="Task Name" [(ngModel)]="names[4]" name="taskFive"/>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <label class="col-sm-3 col-form-label">1PM</label>
+            <div class="col-sm-8">
+              <input type="text" class="form-control" placeholder="Task Name" [(ngModel)]="names[5]" name="taskSix"/>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <label class="col-sm-3 col-form-label">2PM</label>
+            <div class="col-sm-8">
+              <input type="text" class="form-control" placeholder="Task Name" [(ngModel)]="names[6]" name="taskSeven"/>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <label class="col-sm-3 col-form-label">3PM</label>
+            <div class="col-sm-8">
+              <input type="text" class="form-control" placeholder="Task Name" [(ngModel)]="names[7]" name="taskEight"/>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <label class="col-sm-3 col-form-label">4PM</label>
+            <div class="col-sm-8">
+              <input type="text" class="form-control" placeholder="Task Name" [(ngModel)]="names[8]" name="taskNine"/>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <label class="col-sm-3 col-form-label">5PM</label>
+            <div class="col-sm-8">
+              <input type="text" class="form-control" placeholder="Task Name" [(ngModel)]="names[9]" name="taskTen"/>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <label class="col-sm-3 col-form-label">6PM</label>
+            <div class="col-sm-8">
+              <input type="text" class="form-control" placeholder="Task Name" [(ngModel)]="names[10]" name="taskEleven"/>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <label class="col-sm-3 col-form-label">7PM</label>
+            <div class="col-sm-8">
+              <input type="text" class="form-control" placeholder="Task Name" [(ngModel)]="names[11]" name="taskTwelve"/>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <label class="col-sm-3 col-form-label">8PM</label>
+            <div class="col-sm-8">
+              <input type="text" class="form-control" placeholder="Task Name" [(ngModel)]="names[12]" name="taskThirteen"/>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <label class="col-sm-3 col-form-label">9PM</label>
+            <div class="col-sm-8">
+              <input type="text" class="form-control" placeholder="Task Name" [(ngModel)]="names[13]" name="taskFourteen"/>
+            </div>
+          </div>
+          <div class="row mb-3">
+            <label class="col-sm-3 col-form-label">10PM</label>
+            <div class="col-sm-8">
+              <input type="text" class="form-control" placeholder="Task Name" [(ngModel)]="names[14]" name="taskFifteen"/>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+          <button class="btn btn-outline-primary" role="button" (click)="updateSchedule()" data-bs-dismiss="modal">Save</button>
+          <button class="btn btn-danger" role="button" data-bs-dismiss="modal">Cancel</button>
+      </div>
+    </div>
+  </div>
+</div>
