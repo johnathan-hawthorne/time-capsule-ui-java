@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {HttpClient, HttpParams} from "@angular/common/http";
+import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {ITaskType} from "../../models/task-stopwatch/tasktype.model";
 import { ITask } from "../../models/task-stopwatch/task.model";
@@ -13,28 +13,24 @@ export class TaskStopwatchService {
   constructor(private httpClient: HttpClient) { }
 
   getTaskTypes(): Observable<ITaskType[]> {
-    return this.httpClient.get<ITaskType[]>(this.baseUrl + 'tasktype');
+    return this.httpClient.get<ITaskType[]>(this.baseUrl + 'taskTypes');
   }
 
-  getTasks(selectedDate: string, taskTypeId: number): Observable<ITask[]> {
-    const options = {
-      params: new HttpParams().set('selectedDate', selectedDate).set('taskTypeId', taskTypeId)
-    };
-    return this.httpClient.get<any>(this.baseUrl + 'taskstopwatch', options);
+  getTasks(taskTypeId: number): Observable<ITask[]> {
+    // const options = {
+    //   params: new HttpParams().set('taskTypeId', 1)
+    // };
+    return this.httpClient.get<any>(this.baseUrl + 'tasks/1');
   }
 
-  addTask(name: string, displayHour: number, displayMinute: number, displaySecond: number,
-          startTime: string, taskTypeId: number): Observable<any> {
-    const options = {
-      params: new HttpParams()
-        .set('name', name)
-        .set('elapsedHour', displayHour)
-        .set('elapsedMinute', displayMinute)
-        .set('elapsedSecond', displaySecond)
-        .set('startTime', startTime)
-        .set('taskTypeId', taskTypeId)
-    };
-    return this.httpClient.post(this.baseUrl + 'taskstopwatch', {}, options);
+  addTask(name: string, taskTypeId: number, startTime: Date, endTime: Date): Observable<any> {
+
+    // const options = {
+    //   headers: new HttpHeaders()
+    //     .set()
+    // };
+    return this.httpClient.post(this.baseUrl + 'tasks', {name: name, taskTypeId: 1,
+    startDateTime: startTime.toISOString(), endDateTime: endTime.toISOString()},);
   }
 
   updateTask(id: number, name: string, editedStartDate: string, startHours: number, startMinutes: number, startSeconds: number, startPeriod: string, editedEndDate: string,

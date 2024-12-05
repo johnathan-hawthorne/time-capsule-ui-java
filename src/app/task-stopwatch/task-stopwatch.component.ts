@@ -11,7 +11,7 @@ import {TaskStopwatchService} from "./task-stopwatch.service";
   styleUrls: ['./task-stopwatch.component.css']
 })
 export class TaskStopwatchComponent implements OnInit, AfterViewInit {
-  baseUrl = "https://localhost:7162/";
+  baseUrl = "https://localhost:9191/";
   selectedTask: any;
   name: string;
   saveDisabled: boolean;
@@ -24,6 +24,7 @@ export class TaskStopwatchComponent implements OnInit, AfterViewInit {
   editedStartDate: string;
   editedEndDate: string;
   startTime: any;
+  endTime: any;
   editedStartTime: string;
   editedEndTime: string;
   selectedDate: string;
@@ -96,9 +97,9 @@ export class TaskStopwatchComponent implements OnInit, AfterViewInit {
     this.selectedTask = { ...data }
     this.name = data.name;
     this.taskTypeId = data.taskTypeId;
-    let splitStartTime = data.startTime.split(' ');
+    let splitStartTime = data.startDateTime.split(' ');
     this.currentStartTime = splitStartTime[1] + ' ' + splitStartTime[2];
-    let splitEndTime = data.endTime.split(' ');
+    let splitEndTime = data.endDateTime.split(' ');
     this.currentEndTime = splitEndTime[1] + ' ' + splitEndTime[2];
     this.editedStartTime = "";
     this.editedEndTime = "";
@@ -125,21 +126,11 @@ export class TaskStopwatchComponent implements OnInit, AfterViewInit {
   addTask(): void {
     this.modalOpen = false;
     this.modal = null;
-    let secondElement = document.getElementById("seconds");
-    let minElement = document.getElementById("mins");
-    let hourElement = document.getElementById("currentHour");
-    if (minElement && secondElement && hourElement) {
-      let displaySecond = parseInt(secondElement.innerText);
-      let displayMinute = parseInt(minElement.innerText);
-      let displayHour = parseInt(hourElement.innerText);
-
-      this.taskStopwatchService.addTask(this.name, displayHour, displayMinute, displaySecond,
-        this.startTime.toLocaleString(), this.taskTypeId)
-        .subscribe(response => {
-          //const modal = bootstrap.Modal.getInstance('addDialog'); // weird issue where modals won't load without this
-          this.getTasks();
-        });
-    }
+    this.taskStopwatchService.addTask(this.name, this.taskTypeId, this.startTime, this.endTime)
+      .subscribe(response => {
+        //const modal = bootstrap.Modal.getInstance('addDialog'); // weird issue where modals won't load without this
+        this.getTasks();
+      });
   }
 
   updateTask(): void {
@@ -183,6 +174,7 @@ export class TaskStopwatchComponent implements OnInit, AfterViewInit {
       this.worker.terminate();
       this.saveDisabled = false;
       this.stopDisabled = true;
+      this.endTime = new Date();
     }
   }
 
@@ -226,7 +218,7 @@ export class TaskStopwatchComponent implements OnInit, AfterViewInit {
   }
 
   getTasks(): void {
-    this.taskStopwatchService.getTasks(this.selectedDate, this.taskTypeId)
+    this.taskStopwatchService.getTasks(this.taskTypeId)
       .subscribe(response => {
         this.displayTaskType = this.taskTypeId == 1;
         this.tasks = [...response];

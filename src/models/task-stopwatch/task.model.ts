@@ -3,15 +3,15 @@ export class ITask {
   name: string;
   taskTypeId: number;
   elapsedTime: string;
-  startTime: string;
-  endTime: string;
+  startDateTime: string;
+  endDateTime: string;
 
   constructor(id: string, name: string, taskTypeId: number, elapsedTime: string, startTime: string, endTime: string) {
     this.id = id;
     this.name = name;
     this.taskTypeId = taskTypeId;
     this.elapsedTime = elapsedTime;
-    this.startTime = startTime;
-    this.endTime = endTime;
+    this.startDateTime = startTime;
+    this.endDateTime = endTime;
   }
 }

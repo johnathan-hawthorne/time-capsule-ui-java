@@ -49,8 +49,8 @@
             <td>{{task.name}}</td>
             <td *ngIf="displayTaskType">{{getTaskType(task.taskTypeId)}}</td>
             <td>{{task.elapsedTime}}</td>
-            <td>{{task.startTime}}</td>
-            <td>{{task.endTime}}</td>
+            <td>{{task.startDateTime}}</td>
+            <td>{{task.endDateTime}}</td>
             <td>
               <button type="button" class="btn btn-secondary" (click)="deleteTask(task)">
                 <i class="bi bi-x-lg"></i>
