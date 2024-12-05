@@ -35,6 +35,6 @@ Create services for API access [43:40] todo: stopwatch
 
 Java
 ====
-[ ] Populate Task Types  
+[X] Populate Task Types  
 [ ] Format (Start Time and End Time)  
 [ ] Format (Elapsed Time)
