@@ -98,9 +98,9 @@ export class TaskStopwatchComponent implements OnInit, AfterViewInit {
     this.name = data.name;
     this.taskTypeId = data.taskTypeId;
     let splitStartTime = data.startDateTime.split(' ');
-    this.currentStartTime = splitStartTime[1] + ' ' + splitStartTime[2];
+    this.currentStartTime = splitStartTime[0] + ' ' + splitStartTime[1];
     let splitEndTime = data.endDateTime.split(' ');
-    this.currentEndTime = splitEndTime[1] + ' ' + splitEndTime[2];
+    this.currentEndTime = splitEndTime[0] + ' ' + splitEndTime[1];
     this.editedStartTime = "";
     this.editedEndTime = "";
     this.editedStartDate = formatDate(new Date, 'yyyy-MM-dd', 'en');
@@ -135,25 +135,29 @@ export class TaskStopwatchComponent implements OnInit, AfterViewInit {
 
   updateTask(): void {
     if (this.editedStartTime != "" && this.editedEndTime != "") {
-      let splitTime = this.editedStartTime.split(':');
-      let startHours = parseInt(splitTime[0]);
-      let startMinutes = parseInt(splitTime[1][0] + splitTime[1][1]);
-      let startSeconds = 0;
-      let startPeriod = this.editedStartTime[this.editedStartTime.length - 2] + this.editedStartTime[this.editedStartTime.length - 1];
-      splitTime = this.editedEndTime.split(':');
-      let endHours = parseInt(splitTime[0]);
-      let endMinutes = parseInt(splitTime[1][0] + splitTime[1][1]);
-      let endSeconds = 0;
-      let endPeriod = this.editedEndTime[this.editedEndTime.length - 2] + this.editedEndTime[this.editedEndTime.length - 1];
       this.modalOpen = false;
-      this.taskStopwatchService.updateTask(this.selectedTask.id, this.name, this.editedStartDate, startHours, startMinutes, startSeconds, startPeriod,
-        this.editedEndDate, endHours, endMinutes, endSeconds, endPeriod, this.taskTypeId)
+      let startDateTime = new Date();
+      let splitStartDate = this.editedStartDate.split("-");
+      startDateTime.setFullYear(parseInt(splitStartDate[0]), parseInt(splitStartDate[1]), 0);
+      let splitStartTime = this.editedStartTime.split(":");
+      startDateTime.setHours(parseInt(splitStartTime[0]));
+      startDateTime.setMinutes(parseInt(splitStartTime[1][0] + splitStartTime[1][1]));
+      startDateTime.setSeconds(0);
+      let endDateTime = new Date();
+      let splitEndDate = this.editedEndDate.split("-");
+      endDateTime.setFullYear(parseInt(splitEndDate[0]), parseInt(splitEndDate[1]), 0);
+      let splitEndTime = this.editedEndTime.split(":");
+      endDateTime.setHours(parseInt(splitEndTime[0]));
+      endDateTime.setMinutes(parseInt(splitEndTime[1][0] + splitEndTime[1][1]));
+      endDateTime.setSeconds(0)
+      this.taskStopwatchService.updateTask(this.selectedTask.id, this.name, this.taskTypeId, startDateTime,
+        endDateTime)
         .subscribe(() => {
           this.getTasks();
         });
     } else {
-      this.taskStopwatchService.updateTask(this.selectedTask.id, this.name, this.editedStartDate, 0, 0, 0, 'AM',
-        this.editedEndDate, 0, 0, 0, 'AM', this.taskTypeId)
+      this.taskStopwatchService.updateTask(this.selectedTask.id, this.name, this.taskTypeId, new Date(this.editedStartDate),
+        new Date(this.editedEndDate))
         .subscribe(() => {
           this.getTasks();
         });
