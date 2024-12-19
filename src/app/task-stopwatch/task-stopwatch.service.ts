@@ -22,15 +22,10 @@ export class TaskStopwatchService {
         .set('taskTypeId', 1)
         .set('selectedDate', selectedDate)
     };
-    return this.httpClient.get<any>(this.baseUrl + `tasks/1/${selectedDate}`);
+    return this.httpClient.get<any>(this.baseUrl + `tasks`, options);
   }
 
   addTask(name: string, taskTypeId: number, startDateTime: Date, endDateTime: Date): Observable<any> {
-
-    // const options = {
-    //   headers: new HttpHeaders()
-    //     .set()
-    // };
     return this.httpClient.post(this.baseUrl + 'tasks', {name: name, taskTypeId: taskTypeId,
       startDateTime: startDateTime.toISOString(), endDateTime: endDateTime.toISOString()});
   }

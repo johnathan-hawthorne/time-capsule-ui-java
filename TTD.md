@@ -39,6 +39,6 @@ Java
 [X] Format (Start Time and End Time)  
 [X] Format (Elapsed Time)
 [X] Fix update task  
-[ ] Fix elapsed time
-[X] Add ability to get tasks by date (and task type)
-[ ] Fix task type drop down
+[ ] Fix elapsed time  
+[X] Add ability to get tasks by date (and task type)  
+[X] Fix task type filtering
