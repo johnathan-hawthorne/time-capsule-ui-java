@@ -39,4 +39,5 @@ Java
 [X] Format (Start Time and End Time)  
 [X] Format (Elapsed Time)
 [X] Fix update task  
+[ ] Fix elapsed time
 [ ] Fix task type drop down
