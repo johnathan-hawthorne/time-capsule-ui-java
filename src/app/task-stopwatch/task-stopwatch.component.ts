@@ -232,7 +232,7 @@ export class TaskStopwatchComponent implements OnInit, AfterViewInit {
   }
 
   getTasks(): void {
-    this.taskStopwatchService.getTasks(this.taskTypeId)
+    this.taskStopwatchService.getTasks(this.taskTypeId, this.selectedDate)
       .subscribe(response => {
           this.displayTaskType = this.taskTypeId == 1;
           this.tasks = [...response];

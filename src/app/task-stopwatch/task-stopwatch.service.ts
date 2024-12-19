@@ -16,11 +16,13 @@ export class TaskStopwatchService {
     return this.httpClient.get<ITaskType[]>(this.baseUrl + 'taskTypes');
   }
 
-  getTasks(taskTypeId: number): Observable<ITask[]> {
-    // const options = {
-    //   params: new HttpParams().set('taskTypeId', 1)
-    // };
-    return this.httpClient.get<any>(this.baseUrl + 'tasks/1');
+  getTasks(taskTypeId: number, selectedDate: string): Observable<ITask[]> {
+    const options = {
+      params: new HttpParams()
+        .set('taskTypeId', 1)
+        .set('selectedDate', selectedDate)
+    };
+    return this.httpClient.get<any>(this.baseUrl + `tasks/1/${selectedDate}`);
   }
 
   addTask(name: string, taskTypeId: number, startDateTime: Date, endDateTime: Date): Observable<any> {
