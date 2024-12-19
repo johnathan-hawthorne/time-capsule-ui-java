@@ -33,9 +33,11 @@ export class TaskStopwatchService {
       startDateTime: startDateTime.toISOString(), endDateTime: endDateTime.toISOString()});
   }
 
-  updateTask(id: number, name: string, taskTypeId: number, editedStartDateTime: Date, editedEndDateTime: Date): Observable<any> {
+  updateTask(id: number, name: string, taskTypeId: number, editedStartDateTime: Date,
+             editedEndDateTime: Date): Observable<any> {
     return this.httpClient.put(this.baseUrl + 'tasks', {taskId: id, taskTypeId: taskTypeId, name: name,
-      startDateTime: editedStartDateTime.toISOString(), endDateTime: editedEndDateTime.toISOString()});
+      startDateTime: editedStartDateTime.toISOString(),
+      endDateTime: editedEndDateTime.toISOString()});
   }
 
   deleteTask(id: string) {

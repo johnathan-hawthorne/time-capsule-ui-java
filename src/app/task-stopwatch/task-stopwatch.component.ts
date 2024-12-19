@@ -35,6 +35,7 @@ export class TaskStopwatchComponent implements OnInit, AfterViewInit {
   totalElapsedTime: string;
   modal: bootstrap.Modal | null;
   errorMessage: string;
+
   constructor(private taskStopwatchService: TaskStopwatchService) {
     this.name = '';
     this.saveDisabled = true;
@@ -94,13 +95,11 @@ export class TaskStopwatchComponent implements OnInit, AfterViewInit {
   openUpdateDialog(data: ITask): void {
     this.modal = bootstrap.Modal.getInstance('#addModal');
     this.reset();
-    this.selectedTask = { ...data }
+    this.selectedTask = {...data}
     this.name = data.name;
     this.taskTypeId = data.taskTypeId;
-    let splitStartTime = data.startDateTime.split(' ');
-    this.currentStartTime = splitStartTime[0] + ' ' + splitStartTime[1];
-    let splitEndTime = data.endDateTime.split(' ');
-    this.currentEndTime = splitEndTime[0] + ' ' + splitEndTime[1];
+    this.currentStartTime = data.startDateTime;
+    this.currentEndTime = data.endDateTime;
     this.editedStartTime = "";
     this.editedEndTime = "";
     this.editedStartDate = formatDate(new Date, 'yyyy-MM-dd', 'en');
@@ -135,29 +134,40 @@ export class TaskStopwatchComponent implements OnInit, AfterViewInit {
 
   updateTask(): void {
     if (this.editedStartTime != "" && this.editedEndTime != "") {
-      this.modalOpen = false;
-      let startDateTime = new Date();
-      let splitStartDate = this.editedStartDate.split("-");
-      startDateTime.setFullYear(parseInt(splitStartDate[0]), parseInt(splitStartDate[1]), 0);
-      let splitStartTime = this.editedStartTime.split(":");
-      startDateTime.setHours(parseInt(splitStartTime[0]));
-      startDateTime.setMinutes(parseInt(splitStartTime[1][0] + splitStartTime[1][1]));
-      startDateTime.setSeconds(0);
-      let endDateTime = new Date();
-      let splitEndDate = this.editedEndDate.split("-");
-      endDateTime.setFullYear(parseInt(splitEndDate[0]), parseInt(splitEndDate[1]), 0);
-      let splitEndTime = this.editedEndTime.split(":");
-      endDateTime.setHours(parseInt(splitEndTime[0]));
-      endDateTime.setMinutes(parseInt(splitEndTime[1][0] + splitEndTime[1][1]));
-      endDateTime.setSeconds(0)
+      let startPeriod = this.editedStartTime[this.editedStartTime.length - 2]
+        + this.editedStartTime[this.editedStartTime.length - 1];
+      let splitEditedStartDate = this.editedStartDate.split("-");
+      let splitEditedStartTime = this.editedStartTime.split(":");
+      let startHours = this.determineHours(parseInt(splitEditedStartTime[0]), startPeriod);
+      let startDateTime =
+        new Date(parseInt(splitEditedStartDate[0]),
+          parseInt(splitEditedStartDate[1]) - 1,
+          parseInt(splitEditedStartDate[2]),
+          startHours,
+          parseInt(splitEditedStartTime[1][0] + splitEditedStartTime[1][1]),
+          0);
+
+      let endPeriod = this.editedEndTime[this.editedEndTime.length - 2]
+        + this.editedEndTime[this.editedEndTime.length - 1];
+      let splitEditedEndDate = this.editedEndDate.split("-");
+      let splitEditedEndTime = this.editedEndTime.split(":");
+      let endHours = this.determineHours(parseInt(splitEditedEndTime[0]), endPeriod);
+      let endDateTime =
+        new Date(parseInt(splitEditedEndDate[0]),
+          parseInt(splitEditedEndDate[1]) - 1,
+          parseInt(splitEditedEndDate[2]),
+          endHours,
+          parseInt(splitEditedEndTime[1][0] + splitEditedEndTime[1][1]),
+          0);
+
       this.taskStopwatchService.updateTask(this.selectedTask.id, this.name, this.taskTypeId, startDateTime,
         endDateTime)
         .subscribe(() => {
           this.getTasks();
         });
     } else {
-      this.taskStopwatchService.updateTask(this.selectedTask.id, this.name, this.taskTypeId, new Date(this.editedStartDate),
-        new Date(this.editedEndDate))
+      this.taskStopwatchService.updateTask(this.selectedTask.id, this.name, this.taskTypeId, new Date(),
+        new Date())
         .subscribe(() => {
           this.getTasks();
         });
@@ -224,10 +234,10 @@ export class TaskStopwatchComponent implements OnInit, AfterViewInit {
   getTasks(): void {
     this.taskStopwatchService.getTasks(this.taskTypeId)
       .subscribe(response => {
-        this.displayTaskType = this.taskTypeId == 1;
-        this.tasks = [...response];
-        this.getTotalElapsedTime();
-      },
+          this.displayTaskType = this.taskTypeId == 1;
+          this.tasks = [...response];
+          this.getTotalElapsedTime();
+        },
         error => {
           this.errorMessage = `Failed to get tasks: ${error.status}`;
         });
@@ -296,5 +306,24 @@ export class TaskStopwatchComponent implements OnInit, AfterViewInit {
 
       this.totalElapsedTime = result;
     }
+  }
+
+
+  private determineHours(hours: number, period: string): number {
+    let mHours = 0;
+    if (period == "AM") {
+      if (hours == 12) {
+        mHours = 0;
+      } else {
+        mHours = hours;
+      }
+    } else if (period == "PM") {
+      if (hours == 12) {
+        mHours = hours;
+      } else {
+        mHours = hours + 12;
+      }
+    }
+    return mHours;
   }
 }
